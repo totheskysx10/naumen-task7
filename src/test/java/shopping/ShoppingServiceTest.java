@@ -109,7 +109,8 @@ public class ShoppingServiceTest {
         cart.add(product1, 2);
         cart.add(product2, 2);
 
-        Mockito.doNothing().when(productDaoMock).save(Mockito.any(Product.class));
+        Mockito.when(productDaoMock.save(product1)).thenReturn(true);
+        Mockito.when(productDaoMock.save(product2)).thenReturn(true);
 
         Assertions.assertTrue(shoppingService.buy(cart));
     }
@@ -120,8 +121,6 @@ public class ShoppingServiceTest {
     @Test
     void buyTestEmptyCart() throws BuyException {
         Cart cart = new Cart(customer);
-
-        Mockito.doNothing().when(productDaoMock).save(Mockito.any(Product.class));
 
         Assertions.assertFalse(shoppingService.buy(cart));
     }
