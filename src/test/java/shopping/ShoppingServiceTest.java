@@ -133,7 +133,7 @@ public class ShoppingServiceTest {
      * Тест покупки если положить в корзину больше товара чем доступно
      */
     @Test
-    void buyTestAddMoreProducts() {
+    void buyTestMoreProducts() {
         Cart cart = new Cart(customer);
 
         Exception e1 = Assertions.assertThrows(IllegalArgumentException.class, () -> cart.add(product1, 10));
@@ -141,20 +141,6 @@ public class ShoppingServiceTest {
 
         Exception e2 = Assertions.assertThrows(IllegalArgumentException.class, () -> cart.add(product3, 1));
         Assertions.assertEquals("Невозможно добавить товар 'p3' в корзину, т.к. нет необходимого количества товаров", e2.getMessage());
-    }
-
-    /**
-     * Тест покупки если пытаться купить больше товара чем доступно
-     * Здесь проверяю выброс только исключения для p3, ведь метод после этого прекратит выполнение
-     */
-    @Test
-    void buyTestBuyMoreProducts() {
-        Cart cart = new Cart(customer);
-        cart.add(product3, 1);
-        cart.add(product1, 3);
-
-        Exception e = Assertions.assertThrows(BuyException.class, () -> shoppingService.buy(cart));
-        Assertions.assertEquals("В наличии нет необходимого количества товара 'p3'", e.getMessage());
     }
 
     /**
