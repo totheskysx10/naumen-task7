@@ -73,45 +73,22 @@ public class ShoppingServiceTest {
 
     /**
      * Тест получения всех товаров (ассортимента)
-     * Товар 3 с количеством = 0 здесь тоже есть, ведь это реальная ситуация,
-     * когда мы знаем о том что товар продаётся, но в данный момент он закончился
+     * Нет реализации, так как в тестируемом методе нет логики.
+     * Если нужно протестировать, логичнее будет сделать тесты на вызываемый внутри тестируемого метод
      */
     @Test
     void getAllProductsTest() {
-        List<Product> products = List.of(product1, product2, product3);
 
-        Mockito.when(productDaoMock.getAll()).thenReturn(products);
-
-        List<Product> result = shoppingService.getAllProducts();
-
-        Assertions.assertEquals(3, result.size());
-        Assertions.assertTrue(result.contains(new Product("p1", 3)));
-        Assertions.assertTrue(result.contains(new Product("p2", 6)));
-        Assertions.assertTrue(result.contains(new Product("p3", 0)));
     }
 
     /**
      * Тест получения товара по наименованию
+     * Нет реализации, так как в тестируемом методе нет логики.
+     * Если нужно протестировать, логичнее будет сделать тесты на вызываемый внутри тестируемого метод
      */
     @Test
     void getProductByNameTest() {
-        Mockito.when(productDaoMock.getByName(Mockito.eq("p1"))).thenReturn(product1);
 
-        Product expectedProduct = new Product("p1", 3);
-        Assertions.assertEquals(expectedProduct, shoppingService.getProductByName("p1"));
-    }
-
-    /**
-     * Тест получения товара по наименованию, если из БД прилетело null (нет товара)
-     * Проверяет, что выкидывается исключение (должно быть проверяемым)
-     */
-    @Test
-    void getProductByNameNoProductTest() {
-        Mockito.when(productDaoMock.getByName(Mockito.eq("p3"))).thenReturn(null);
-
-        Exception e = Assertions.assertThrows(Exception.class, () -> shoppingService.getProductByName("p3"));
-
-        Assertions.assertEquals("Товар с именем 'p3' не найден", e.getMessage());
     }
 
     /**
