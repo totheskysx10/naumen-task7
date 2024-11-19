@@ -169,6 +169,20 @@ public class ShoppingServiceTest {
     }
 
     /**
+     * Тест покупки дублирующегося товара
+     */
+    @Test
+    void buyTestDuplicateProductsInCart() throws BuyException {
+        Cart cart = new Cart(customer);
+        cart.add(product2, 1);
+        cart.add(product2, 2);
+
+        Assertions.assertTrue(shoppingService.buy(cart));
+        Mockito.verify(productDaoMock).save(new Product("p2", 3));
+        Assertions.assertTrue(cart.getProducts().isEmpty());
+    }
+
+    /**
      * Тест покупки при дробном количестве товара
      * Тест не реализован (согласно требованиям задачи оставлено пустое тело метода),
      * так при реализации код не запустится из-за несоответствия дробного числа
