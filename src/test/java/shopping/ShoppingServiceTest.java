@@ -8,8 +8,6 @@ import org.mockito.Mockito;
 import product.Product;
 import product.ProductDao;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -144,17 +142,30 @@ public class ShoppingServiceTest {
     }
 
     /**
-     * Тест покупки при некорректном количестве товара (ноль, меньше нуля)
+     * Тест покупки при некорректном количестве товара (меньше нуля)
      */
     @Test
-    void buyTestInvalidProductsQuantity() {
+    void buyTestInvalidProductsQuantityLessThanZero() {
         Cart cart = new Cart(customer);
 
-        Exception e1 = Assertions.assertThrows(IllegalArgumentException.class, () -> cart.add(product1, -1));
-        Assertions.assertEquals("Количество товара должно быть положительным", e1.getMessage());
+        Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> cart.add(product1, -1));
+        Assertions.assertEquals("Количество товара должно быть положительным", e.getMessage());
+    }
 
-        Exception e2 = Assertions.assertThrows(IllegalArgumentException.class, () -> cart.add(product1, 1));
-        Assertions.assertEquals("Количество товара должно быть положительным", e2.getMessage());
+    /**
+     * Тест покупки при некорректном количестве товара (ноля)
+     * Тест падает, потому что покупать нечего (проверяю запрет на покупку) - объект товара как бы есть,
+     * но при таком количестве товара фактически нет
+     * Сообщение отличается от того, что в основном коде -
+     * товар может быть в наличии, но покупку при таком состоянии корзины совершить нельзя
+     */
+    @Test
+    void buyTestInvalidProductsQuantityZero()  {
+        Cart cart = new Cart(customer);
+        cart.add(product1, 0);
+
+        Exception e = Assertions.assertThrows(BuyException.class, () -> shoppingService.buy(cart));
+        Assertions.assertEquals("Количество товара должно быть положительным", e.getMessage());
     }
 
     /**
